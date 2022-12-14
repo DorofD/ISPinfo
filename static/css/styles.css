@@ -1,0 +1,6 @@
+ul.mainmenu {
+  list-style: none;
+}
+ul.mainmenu li {
+  float: left;
+}
