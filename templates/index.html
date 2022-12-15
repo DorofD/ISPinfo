@@ -1,3 +1,15 @@
 {% extends 'base.html' %} {% block content %} {{ super() }}
-<h1>Boba</h1>
+
+<form action="/pid" method="post">
+  <label class="search">PID</label
+  ><input class="pid" type="text" name="pid" value="" />
+  <input type="submit" value="Найти" />
+</form>
+<br />
+<form action="/shop" method="post">
+  <label class="search">Магазин</label
+  ><input class="shop" type="text" name="shop" value="" />
+  <input type="submit" value="Найти" />
+</form>
+
 {% endblock %}
