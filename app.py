@@ -1,9 +1,8 @@
 from flask import Flask, render_template, url_for, request, flash, session, redirect, abort, g, make_response
 
-import sqlite3, os, math, time, re
+import dbscripts as db
 
 app = Flask(__name__)
-
 
 
 @app.route('/')
@@ -15,8 +14,7 @@ def index():
 def pid():
     result = 'сасать, нет такого магазина, лох'
     if request.method == 'POST':
-        if request.form['pid'] == '228':
-            result = request.form['pid']
+        result = db.get_shop(request.form['pid'])
     return render_template('searchResult.html', result = result, class1 = 'active', class2 = '', class3 = '')
 
 @app.route('/shop', methods=('GET', 'POST'))
