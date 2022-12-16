@@ -60,12 +60,17 @@ input.shop {
 }
 
 table {
-  border: 1px solid grey;
+  background: #4caf50;
+  border-spacing: 0 5px;
 }
 
 th {
+  background-color: #f1f1f1;
+  padding: 10px 20px;
   border: 1px solid grey;
 }
 td {
+  background-color: #f1f1f1;
   border: 1px solid grey;
+  padding: 5px 10px;
 }
