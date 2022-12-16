@@ -14,8 +14,9 @@
     <header>
       <nav>
         <ul class="mainmenu">
-          <li><a href="{{ url_for('index')}}">Главная</a></li>
-          <li><a href="">Актуализация</a></li>
+          <li><a class="{{class1}}" href="{{ url_for('index')}}">Главная</a></li>
+          <li><a class="{{class2}}" href="{{ url_for('update')}}">Актуализация</a></li>
+          <li><a class="{{class3}}" href="{{ url_for('about')}}">О сайте</a></li>
         </ul>
       </nav>
     </header>
