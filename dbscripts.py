@@ -7,10 +7,12 @@ def create_db():
     pid	INTEGER PRIMARY KEY,
     name TEXT NOT NULL UNIQUE
         )""")
-    # cur.execute("""CREATE TABLE IF NOT EXISTS contracts (
-    # pid	INTEGER PRIMARY KEY,
-    # name TEXT NOT NULL UNIQUE
-    #     )""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS contracts (
+    ptid INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    number TEXT NOT NULL,
+    sdemail TEXT
+        )""")
     conn.close()
 
 def get_data():
@@ -21,19 +23,21 @@ def get_data():
         print(result)
     conn.close()
     
-def get_shop(pid):
+def get_contracts(pid):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
-    try:
-        cursor.execute(f"""SELECT * FROM shops
-        WHERE pid = '{pid}'""")
-        shop = cursor.fetchall()
-        result = f'{shop[0][0]} {shop[0][1]}'
-        conn.close()
-        return result
-    except:
-        conn.close()
-        return 'PID не найден'
+    query = f"""SELECT shops.pid, shops.name, contracts.type, contracts.number, contracts.sdemail FROM shops, contracts
+        ON contracts.ptid = shops.pid
+        WHERE pid = '{pid}'"""
+    # try:
+    cursor.execute(query)
+    result= cursor.fetchall()
+    # result = f'{shop[0][0]} {shop[0][1]}'
+    conn.close()
+    return result
+    # except:
+    #     conn.close()
+    #     return 'PID не найден'
 
 def set_data():
     conn = sq.connect('database.db')
@@ -41,9 +45,7 @@ def set_data():
     # pid = int(input('PID: '))
     # shop = str(input('Shop name: '))
     pid = 156
-    shop = 'Залупа (город)'
+    shop = 'Магазин (город)'
     cursor.execute(f"""INSERT INTO shops (pid, name) VALUES ('{pid}', '{shop}')""")
     conn.commit()
     conn.close()
-
-print(get_shop(123))

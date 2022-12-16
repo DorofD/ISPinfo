@@ -1,3 +1,30 @@
-{% extends 'base.html' %} {% block content %} {{ super() }} {{ result }}
+{% extends 'base.html' %} {% block content %} {{ super() }} {% if result[0] %}
+<table>
+  <tr>
+    <th>PID</th>
+    <th>Магазин</th>
+    <th>Канал</th>
+    <th>Номер договора</th>
+    <th>Почта техподдержки</th>
+  </tr>
+  <tr>
+    <td>{{ result[0][0] }}</td>
+    <td>{{ result[0][1] }}</td>
+    <td>{{ result[0][2] }}</td>
+    <td>{{ result[0][3] }}</td>
+    <td>{{ result[0][4] }}</td>
+  </tr>
+  {% if result[1] %}
+  <tr>
+    <td>{{ result[1][0] }}</td>
+    <td>{{ result[1][1] }}</td>
+    <td>{{ result[1][2] }}</td>
+    <td>{{ result[1][3] }}</td>
+    <td>{{ result[1][4] }}</td>
+  </tr>
+  {% endif %} {% else %} PID не найден {% endif %}
+</table>
+
+<br />
 <br />
 <button><a href="{{ url_for('index')}}">Главная</a></button> {% endblock %}

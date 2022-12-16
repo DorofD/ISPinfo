@@ -7,14 +7,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    print(url_for('index'))
     return render_template('index.html', class1 = 'active', class2 = '', class3 = '')
 
 @app.route('/pid', methods=('GET', 'POST'))
 def pid():
-    result = 'сасать, нет такого магазина, лох'
     if request.method == 'POST':
-        result = db.get_shop(request.form['pid'])
+        result = db.get_contracts(request.form['pid'])
     return render_template('searchResult.html', result = result, class1 = 'active', class2 = '', class3 = '')
 
 @app.route('/shop', methods=('GET', 'POST'))
