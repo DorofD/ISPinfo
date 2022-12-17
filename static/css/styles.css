@@ -35,6 +35,20 @@ li a:hover:not(.active) {
   color: white;
 }
 
+td a.intable {
+  float: left;
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  height: 34px;
+}
+
+td a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
 div.content {
   margin: 12px;
   padding: 8px;
@@ -60,6 +74,7 @@ input.shop {
 }
 
 table {
+  width: 100%;
   background: #4caf50;
   border-spacing: 0 5px;
 }
@@ -73,4 +88,8 @@ td {
   background-color: #f1f1f1;
   border: 1px solid grey;
   padding: 5px 10px;
+}
+
+P {
+  line-height: 1.5em;
 }
