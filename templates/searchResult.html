@@ -4,7 +4,12 @@
     <th>PID</th>
     <th>Магазин</th>
     <th>Канал</th>
+    <th>IP адрес</th>
+    <th>Юр. лицо</th>
+    <th>Провайдер</th>
     <th>Номер договора</th>
+    <th>Адрес магазина</th>
+    <th>Телефон техподдержки</th>
     <th>Почта техподдержки</th>
   </tr>
   <tr>
@@ -13,6 +18,11 @@
     <td>{{ result[0][2] }}</td>
     <td>{{ result[0][3] }}</td>
     <td>{{ result[0][4] }}</td>
+    <td>{{ result[0][5] }}</td>
+    <td>{{ result[0][6] }}</td>
+    <td>{{ result[0][7] }}</td>
+    <td>{{ result[0][8] }}</td>
+    <td>{{ result[0][9] }}</td>
   </tr>
   {% if result[1] %}
   <tr>
@@ -21,6 +31,11 @@
     <td>{{ result[1][2] }}</td>
     <td>{{ result[1][3] }}</td>
     <td>{{ result[1][4] }}</td>
+    <td>{{ result[1][5] }}</td>
+    <td>{{ result[1][6] }}</td>
+    <td>{{ result[1][7] }}</td>
+    <td>{{ result[1][8] }}</td>
+    <td>{{ result[1][9] }}</td>
   </tr>
   {% endif %} {% else %} PID не найден {% endif %}
 </table>
