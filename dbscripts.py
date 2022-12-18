@@ -54,13 +54,36 @@ def set_data():
     conn.commit()
     conn.close()
 
+def delete_all_data():
+        conn = sq.connect('database.db')
+        cursor = conn.cursor()
+        query = """
+            SELECT * FROM contracts
+        """
+        cursor.execute(query)
+        query = """
+            DELETE FROM contracts
+        """
+        cursor.execute(query)
+        conn.commit()
+        conn.close()
+
 def db_update(file):
     try:
         conn = sq.connect('database.db')
         cursor = conn.cursor()
         wb = openpyxl.load_workbook(file) # Подключение листа Excel
         sheet = wb.active
-
+        # перед действием ниже нужно дописать проверки импортированного файла
+        query = """
+            SELECT * FROM contracts
+        """
+        cursor.execute(query)
+        query = """
+            DELETE FROM contracts
+        """
+        cursor.execute(query)
+        
         i = 1
         for row in sheet["A"]:
             if sheet['A'][i].value:
