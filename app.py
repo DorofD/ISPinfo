@@ -4,6 +4,7 @@ import dbscripts as db
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'aboba1488'
 
 
 @app.route('/')
@@ -17,8 +18,7 @@ def pid():
     return render_template('searchResult.html', result = result, class1 = 'active', class2 = '', class3 = '')
 
 @app.route('/shop', methods = ('GET', 'POST'))
-def shop():
-    result = 'сасать, нет такого магазина, лох'
+def shop(): # в разработке
     if request.method == 'POST':
         if request.form['shop'] == 'магазин':
             result = request.form['shop']
@@ -36,8 +36,11 @@ def about():
 def upload():
     if request.method == 'POST':
         file = request.files['file']
-        if file:
-            print(db.db_update(file))
+        if file and db.db_update(file):
+            flash('Импорт успешно выполнен', category = 'success')
+        else:
+            flash('Импорт не выполнен', category = 'error')
+
     return render_template('update.html', class1 = '', class2 = 'active', class3 = '')
 
 if __name__ == '__main__':

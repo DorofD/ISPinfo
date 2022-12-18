@@ -55,13 +55,13 @@ def set_data():
     conn.close()
 
 def db_update(file):
-    # try:
+    try:
         conn = sq.connect('database.db')
         cursor = conn.cursor()
         wb = openpyxl.load_workbook(file) # Подключение листа Excel
         sheet = wb.active
 
-        i = 0
+        i = 1
         for row in sheet["A"]:
             if sheet['A'][i].value:
                 query = f""" 
@@ -80,11 +80,8 @@ def db_update(file):
                 """
                 cursor.execute(query)
                 i += 1
-
-        
         conn.commit()
         conn.close()
         return True
-    # except:
-    #     print('Zalupa')
-    #     return False
+    except:
+        return False
