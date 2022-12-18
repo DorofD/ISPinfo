@@ -1,4 +1,5 @@
 import sqlite3 as sq
+import openpyxl
 
 def create_db():
     conn = sq.connect('database.db')
@@ -53,4 +54,37 @@ def set_data():
     conn.commit()
     conn.close()
 
-create_db()
+def db_update(file):
+    # try:
+        conn = sq.connect('database.db')
+        cursor = conn.cursor()
+        wb = openpyxl.load_workbook(file) # Подключение листа Excel
+        sheet = wb.active
+
+        i = 0
+        for row in sheet["A"]:
+            if sheet['A'][i].value:
+                query = f""" 
+                    INSERT INTO contracts (pid, shop_name, wan_type, ip, legal_entity, isp, contract, shop_address, sd_phone, sd_email) 
+                    VALUES ('{sheet['A'][i].value}',
+                    '{sheet['B'][i].value}',
+                    '{sheet['C'][i].value}',
+                    '{sheet['D'][i].value}',
+                    '{sheet['E'][i].value}',
+                    '{sheet['F'][i].value}',
+                    '{sheet['G'][i].value}',
+                    '{sheet['H'][i].value}',
+                    '{sheet['I'][i].value}',
+                    '{sheet['J'][i].value}'
+                    )
+                """
+                cursor.execute(query)
+                i += 1
+
+        
+        conn.commit()
+        conn.close()
+        return True
+    # except:
+    #     print('Zalupa')
+    #     return False

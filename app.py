@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, flash, session, redi
 
 import dbscripts as db
 
+
 app = Flask(__name__)
 
 
@@ -15,7 +16,7 @@ def pid():
         result = db.get_contracts(request.form['pid'])
     return render_template('searchResult.html', result = result, class1 = 'active', class2 = '', class3 = '')
 
-@app.route('/shop', methods=('GET', 'POST'))
+@app.route('/shop', methods = ('GET', 'POST'))
 def shop():
     result = 'сасать, нет такого магазина, лох'
     if request.method == 'POST':
@@ -30,6 +31,14 @@ def update():
 @app.route('/about')
 def about():
     return render_template('about.html', class1 = '', class2 = '', class3 = 'active')
+
+@app.route('/upload', methods = ('GET', 'POST'))
+def upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            print(db.db_update(file))
+    return render_template('update.html', class1 = '', class2 = 'active', class3 = '')
 
 if __name__ == '__main__':
     app.run(debug=True)
