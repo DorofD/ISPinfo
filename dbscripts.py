@@ -8,7 +8,7 @@ def create_db():
         pid INTEGER NOT NULL,
         shop_name TEXT NOT NULL,
         wan_type TEXT NOT NULL,
-        ip TEXT NOT NULL,
+        ip TEXT,
         legal_entity TEXT NOT NULL,
         isp TEXT NOT NULL,
         contract TEXT NOT NULL,
@@ -72,7 +72,7 @@ def db_update(file):
     try:
         conn = sq.connect('database.db')
         cursor = conn.cursor()
-        wb = openpyxl.load_workbook(file) # Подключение листа Excel
+        wb = openpyxl.load_workbook(file) # подключение листа Excel
         sheet = wb.active
         # перед действием ниже нужно дописать проверки импортированного файла
         query = """
@@ -108,3 +108,5 @@ def db_update(file):
         return True
     except:
         return False
+
+create_db()

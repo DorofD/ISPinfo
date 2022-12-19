@@ -1,5 +1,5 @@
 body {
-  font-family: 'Yandex Sans Text Regular', 'Arial';
+  font-family: "Yandex Sans Text Regular", "Arial";
   margin: 0;
   padding: 0;
   height: 100%;
@@ -122,4 +122,9 @@ P {
 .flash.error {
   border: 1px solid #ff4343;
   background: #ff9c9c;
+}
+
+.flash.wrongpass {
+  border: 1px solid #f7de00;
+  background: #fff8bb;
 }
