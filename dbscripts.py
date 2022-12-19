@@ -11,7 +11,7 @@ def create_db():
         ip TEXT,
         legal_entity TEXT NOT NULL,
         isp TEXT NOT NULL,
-        contract TEXT NOT NULL,
+        contract TEXT,
         shop_address TEXT NOT NULL,
         sd_phone TEXT,
         sd_email TEXT
@@ -83,9 +83,9 @@ def db_update(file):
             DELETE FROM contracts
         """
         cursor.execute(query)
-        
+        # range(len(sheet["A"]) - 1)
         i = 1
-        for row in sheet["A"]:
+        for row in range(len(sheet["A"]) - 2):
             if sheet['A'][i].value:
                 query = f""" 
                     INSERT INTO contracts (pid, shop_name, wan_type, ip, legal_entity, isp, contract, shop_address, sd_phone, sd_email) 
@@ -107,6 +107,6 @@ def db_update(file):
         conn.close()
         return True
     except:
+        conn.close()
         return False
 
-create_db()
