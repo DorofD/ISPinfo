@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block content %} {{ super() }} {% if result[0] %}
+{% extends 'base.html' %} {% block content %} {{ super() }} {% if result_len %}
 <table>
   <tr>
     <th>PID</th>
@@ -11,64 +11,32 @@
     <th>Адрес магазина</th>
     <th>Телефон техподдержки</th>
     <th>Почта техподдержки</th>
+    <th>Заявка</th>
   </tr>
+  {% for i in range(result_len) %}
   <tr>
-    <td>{{ result[0][0] }}</td>
-    <td>{{ result[0][1] }}</td>
-    <td>{{ result[0][2] }}</td>
-    <td>{{ result[0][3] }}</td>
-    <td>{{ result[0][4] }}</td>
-    <td>{{ result[0][5] }}</td>
-    <td>{{ result[0][6] }}</td>
-    <td>{{ result[0][7] }}</td>
-    <td>{{ result[0][8] }}</td>
-    <td>{{ result[0][9] }}</td>
-  </tr>
-  {% if result[1] %}
-  <tr>
-    <td>{{ result[1][0] }}</td>
-    <td>{{ result[1][1] }}</td>
-    <td>{{ result[1][2] }}</td>
-    <td>{{ result[1][3] }}</td>
-    <td>{{ result[1][4] }}</td>
-    <td>{{ result[1][5] }}</td>
-    <td>{{ result[1][6] }}</td>
-    <td>{{ result[1][7] }}</td>
-    <td>{{ result[1][8] }}</td>
-    <td>{{ result[1][9] }}</td>
-  </tr>
-  {% endif %} {% else %} PID не найден {% endif %}
-</table>
-{% if result[0] %}
-<table>
-  <tr>
-    <th width="50%">Заявка {{ result[0][2] }}</th>
-    {% if result[1] %}
-    <th width="50%">Заявка {{ result[1][2] }}</th>
-    {% endif %}
-  </tr>
-  <tr>
+    <td>{{ result[i][1] }}</td>
+    <td>{{ result[i][2] }}</td>
+    <td>{{ result[i][3] }}</td>
+    <td>{{ result[i][4] }}</td>
+    <td>{{ result[i][5] }}</td>
+    <td>{{ result[i][6] }}</td>
+    <td>{{ result[i][7] }}</td>
+    <td>{{ result[i][8] }}</td>
+    <td>{{ result[i][9] }}</td>
+    <td>{{ result[i][10] }}</td>
     <td>
-      <p>
-        Обращаюсь от юр.лица: {{ result[0][4] }}
-        <br />Договор: {{ result[0][6] }} <br />Наблюдаем проблему с интернет-каналом по адресу: {{
-        result[0][7] }} <br />Ip адрес: {{ result[0][3] }}<br />Просьба проверить работоспособность
-        услуги
-      </p>
+      <form
+        action="{{url_for('application', id = result[i][0])}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <p><input type="submit" value="Сформировать" name="enter" /></p>
+      </form>
     </td>
-    {% if result[1] %}
-    <td>
-      <p>
-        Обращаюсь от юр.лица: {{ result[0][4] }}
-        <br />Договор: {{ result[1][6] }} <br />Наблюдаем проблему с интернет-каналом по адресу: {{
-        result[1][7] }} <br />Ip адрес: {{ result[1][3] }}<br />Просьба проверить работоспособность
-        услуги
-      </p>
-    </td>
-    {% endif %}
   </tr>
+  {% endfor %}{% else %} PID не найден {% endif %}
 </table>
-{% endif %}
 <br />
 
 <a class="btn" href="{{ url_for('index')}}">Главная</a>{% endblock %}

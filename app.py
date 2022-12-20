@@ -14,22 +14,23 @@ def index():
 @app.route('/pid', methods=('GET', 'POST'))
 def pid():
     if request.method == 'POST':
-        result = db.get_contracts(request.form['pid'])
-    return render_template('searchResult.html', result = result, class1 = 'active', class2 = '', class3 = '')
+        result = db.get_contracts_pid(request.form['pid'])
+    return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
 
 @app.route('/shop', methods = ('GET', 'POST')) # в разработке
 def shop():
     if request.method == 'POST':
-        if request.form['shop'] == 'магазин':
-            result = request.form['shop']
-    return render_template('searchResult.html', result = result, class1 = 'active', class2 = '', class3 = '')
+        result = db.get_contracts_shop(request.form['shop'])
+    return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
 
-@app.route('/update')
+@app.route('/application/<id>', methods = ('GET', 'POST'))
+def application(id):
+    if request.method == 'POST':
+        result = db.get_contract_id(id)
+    return render_template('application.html', result = result, class1 = 'active', class2 = '', class3 = '')
+
+@app.route('/update', methods = ('GET', 'POST'))
 def update():
-    return render_template('update.html', class1 = '', class2 = 'active', class3 = '')
-
-@app.route('/upload', methods = ('GET', 'POST'))
-def upload():
     if request.method == 'POST':
         if request.form['password'] == '1488':
             file = request.files['file']
@@ -39,7 +40,6 @@ def upload():
                 flash('Импорт не выполнен', category = 'error')
         else:
             flash('Неверный пароль', category = 'wrongpass')
-
     return render_template('update.html', class1 = '', class2 = 'active', class3 = '')
 
 @app.route('/about')

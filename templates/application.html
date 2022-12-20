@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block content %} {{ super() }} {% if result[0] %}
+<table>
+  <tr>
+    <th width="50%">Заявка {{ result[0][2] }}</th>
+  </tr>
+  <tr>
+    <td>
+      <p>
+        Обращаюсь от юр.лица: {{ result[0][5] }}
+        <br />Договор: {{ result[0][7] }} <br />Наблюдаем проблему с
+        интернет-каналом по адресу: {{ result[0][8] }} <br />Ip адрес: {{
+        result[0][4] }}<br />Просьба проверить работоспособность услуги
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">Почта техподдержки: {{ result[0][10] }}</td>
+  </tr>
+</table>
+{% endif %}
+<br />
+<a class="btn" href="{{ url_for('index')}}">Главная</a>{% endblock %}

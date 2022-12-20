@@ -5,6 +5,7 @@ def create_db():
     conn = sq.connect('database.db')
     cursor = conn.cursor()
     query = """CREATE TABLE IF NOT EXISTS contracts (
+        id INTEGER NOT NULL UNIQUE, 
         pid INTEGER NOT NULL,
         shop_name TEXT NOT NULL,
         wan_type TEXT NOT NULL,
@@ -14,7 +15,8 @@ def create_db():
         contract TEXT,
         shop_address TEXT NOT NULL,
         sd_phone TEXT,
-        sd_email TEXT
+        sd_email TEXT,
+        PRIMARY KEY ("id" AUTOINCREMENT)
     )
     """
     cursor.execute(query)
@@ -28,31 +30,35 @@ def get_data():
         print(result)
     conn.close()
     
-def get_contracts(pid):
+def get_contracts_pid(pid):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
     query = f"""SELECT * FROM contracts
         WHERE pid = '{pid}'"""
-    # try:
     cursor.execute(query)
-    result= cursor.fetchall()
-    # result = f'{shop[0][0]} {shop[0][1]}'
+    result = cursor.fetchall()
     conn.close()
     return result
-    # except:
-    #     conn.close()
-    #     return 'PID не найден'
 
-def set_data():
+def get_contracts_shop(shop_name):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
-    # pid = int(input('PID: '))
-    # shop = str(input('Shop name: '))
-    pid = 156
-    shop = 'Магазин (город)'
-    cursor.execute(f"""INSERT INTO shops (pid, name) VALUES ('{pid}', '{shop}')""")
-    conn.commit()
+    query = f"""SELECT * FROM contracts
+        WHERE shop_name LIKE '%{shop_name}%'"""
+    cursor.execute(query)
+    result = cursor.fetchall()
     conn.close()
+    return result
+    
+def get_contract_id(id):
+    conn = sq.connect('database.db')
+    cursor = conn.cursor()
+    query = f"""SELECT * FROM contracts
+        WHERE id = '{id}'"""
+    cursor.execute(query)
+    result = cursor.fetchall()
+    conn.close()
+    return result
 
 def delete_all_data():
         conn = sq.connect('database.db')
@@ -109,4 +115,3 @@ def db_update(file):
     except:
         conn.close()
         return False
-
