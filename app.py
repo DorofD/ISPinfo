@@ -17,7 +17,7 @@ def pid():
         result = db.get_contracts_pid(request.form['pid'])
     return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
 
-@app.route('/shop', methods = ('GET', 'POST')) # в разработке
+@app.route('/shop', methods = ('GET', 'POST'))
 def shop():
     if request.method == 'POST':
         result = db.get_contracts_shop(request.form['shop'])
