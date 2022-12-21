@@ -1,14 +1,27 @@
-{% extends 'base.html' %} {% block content %} {{ super() }} Импорт файла .xlsx
-{% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{ msg }}</div>
-{% endfor %}
-<form
-  action="{{url_for('update')}}"
-  method="POST"
-  enctype="multipart/form-data"
->
-  <p><input type="file" name="file" /></p>
-  <p><label>Пароль: </label><input type="text" name="password" /></p>
-  <p><input type="submit" name="submit" /></p>
+{% extends 'base.html' %} {% block content %} {{ super() }}
+
+<form action="{{url_for('update')}}" method="POST" enctype="multipart/form-data">
+  <table class="index">
+    <tr>
+      <th>Импорт файла .xlsx</th>
+    </tr>
+    <tr>
+      <td>
+        {% for cat, msg in get_flashed_messages(True) %}
+        <div class="flash {{cat}}">{{ msg }}</div>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <td><input type="file" name="file" /></td>
+    </tr>
+    <tr>
+      <td><label>Пароль: </label><input type="text" name="password" /></td>
+    </tr>
+    <tr>
+      <td><input type="submit" name="submit" /></td>
+    </tr>
+  </table>
 </form>
+
 {% endblock %}

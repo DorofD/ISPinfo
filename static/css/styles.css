@@ -1,5 +1,5 @@
 body {
-  font-family: "Yandex Sans Text Regular", "Arial";
+  font-family: 'Yandex Sans Text Regular', 'Arial';
   margin: 0;
   padding: 0;
   height: 100%;
@@ -11,7 +11,7 @@ ul.mainmenu {
   margin: 0;
   padding: 0;
   width: 100%;
-  background-color: #f1f1f1;
+  background-color: #f5f5f5;
   height: 50px;
 }
 
@@ -56,7 +56,7 @@ td a:hover:not(.active) {
   color: #000;
   padding: 8px 16px;
   text-decoration: none;
-  background-color: #f1f1f1;
+  background-color: #f5f5f5;
   border-radius: 5px; /* Скругляем уголки */
   border: 1px solid #000;
 }
@@ -92,16 +92,22 @@ input.shop {
 table {
   width: 100%;
   background: #4caf50;
-  border-spacing: 0 5px;
+  border-spacing: 0 2px;
+}
+
+table.index {
+  width: 485px;
+  background: #4caf50;
+  border-spacing: 0 2px;
 }
 
 th {
-  background-color: #f1f1f1;
+  background-color: #f5f5f5;
   padding: 10px 20px;
   border: 1px solid grey;
 }
 td {
-  background-color: #f1f1f1;
+  background-color: #f5f5f5;
   border: 1px solid grey;
   padding: 5px 10px;
 }
