@@ -11,22 +11,23 @@ app.config['SECRET_KEY'] = 'aboba1488'
 def index():
     return render_template('index.html', class1 = 'active', class2 = '', class3 = '')
 
-@app.route('/pid', methods=('GET', 'POST'))
+@app.route('/search', methods=(['POST']))
 def pid():
-    if request.method == 'POST':
+    if request.form['searchType'] == 'pid':
         result = db.get_contracts_pid(request.form['pid'])
-    return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
-
-@app.route('/shop', methods = ('GET', 'POST'))
-def shop():
-    if request.method == 'POST':
+    elif request.form['searchType'] == 'shop':
         result = db.get_contracts_shop(request.form['shop'])
     return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
 
-@app.route('/application/<id>', methods = ('GET', 'POST'))
+# @app.route('/shop', methods = (['POST']))
+# def shop():
+#     print(request.form['shop1'])
+#     result = db.get_contracts_shop(request.form['shop'])
+#     return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
+
+@app.route('/application/<id>', methods = (['POST']))
 def application(id):
-    if request.method == 'POST':
-        result = db.get_contract_id(id)
+    result = db.get_contract_id(id)
     return render_template('application.html', result = result, class1 = 'active', class2 = '', class3 = '')
 
 @app.route('/update', methods = ('GET', 'POST'))

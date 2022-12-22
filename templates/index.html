@@ -3,17 +3,19 @@
 <table class="index">
   <tr>
     <td>
-      <form action="/pid" method="post">
+      <form action="/search" method="post">
         <label class="search">PID</label><input class="pid" type="text" name="pid" value="" />
         <input type="submit" value="Найти" />
+        <input type="hidden" name="searchType" value="pid" />
       </form>
     </td>
   </tr>
   <tr>
     <td>
-      <form action="/shop" method="post">
+      <form action="/search" method="post">
         <label class="search">Магазин</label><input class="shop" type="text" name="shop" value="" />
         <input type="submit" value="Найти" />
+        <input type="hidden" name="searchType" value="shop" />
       </form>
     </td>
   </tr>
