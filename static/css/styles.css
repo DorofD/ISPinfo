@@ -52,12 +52,11 @@ td a:hover:not(.active) {
 .btn {
   font-size: large;
   float: left;
-
   color: #000;
   padding: 8px 16px;
   text-decoration: none;
   background-color: #f5f5f5;
-  border-radius: 5px; /* Скругляем уголки */
+  border-radius: 5px;
   border: 1px solid #000;
 }
 .btn:hover {
@@ -77,6 +76,7 @@ div.img1 {
 }
 
 label.search {
+  font-size: medium;
   margin: 12px;
   padding: 8px;
 }
@@ -123,14 +123,50 @@ P {
 .flash.success {
   border: 1px solid #21db56;
   background: #aeffc5;
+  border-radius: 6px;
 }
 
 .flash.error {
   border: 1px solid #ff4343;
   background: #ff9c9c;
+  border-radius: 6px;
 }
 
 .flash.wrongpass {
   border: 1px solid #f7de00;
   background: #fff8bb;
+  border-radius: 6px;
+}
+
+div.login {
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}
+form.login {
+  background-color: #f5f5f5;
+  width: 320px;
+  border: 2px solid;
+  border-color: #4caf50;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+input[type='text'] {
+  border: 2px solid #4caf50;
+  border-radius: 4px;
+  font-size: medium;
+}
+
+input[type='password'] {
+  border: 2px solid #4caf50;
+  border-radius: 4px;
+  font-size: medium;
+}
+
+input[type='submit'] {
+  font-size: medium;
+}
+
+input[type='file'] {
+  font-size: medium;
 }

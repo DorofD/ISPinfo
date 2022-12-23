@@ -19,12 +19,6 @@ def pid():
         result = db.get_contracts_shop(request.form['shop'])
     return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
 
-# @app.route('/shop', methods = (['POST']))
-# def shop():
-#     print(request.form['shop1'])
-#     result = db.get_contracts_shop(request.form['shop'])
-#     return render_template('searchResult.html', result = result, result_len = len(result), class1 = 'active', class2 = '', class3 = '')
-
 @app.route('/application/<id>', methods = (['POST']))
 def application(id):
     result = db.get_contract_id(id)
@@ -47,5 +41,14 @@ def update():
 def about():
     return render_template('about.html', class1 = '', class2 = '', class3 = 'active')
 
+@app.route('/login', methods = ('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        if db.login(request.form['login'], request.form['password']):
+            return redirect(url_for('index'))
+        else:
+            flash('Не удалось войти', category = 'wrongpass')
+    return render_template('login.html')
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

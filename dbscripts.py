@@ -1,6 +1,8 @@
 import sqlite3 as sq
 import openpyxl
-import ldap3
+from ldap3 import Connection
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 def create_db():
     conn = sq.connect('database.db')
@@ -17,6 +19,16 @@ def create_db():
         shop_address TEXT NOT NULL,
         sd_phone TEXT,
         sd_email TEXT,
+        PRIMARY KEY ("id" AUTOINCREMENT)
+    )
+    """
+    cursor.execute(query)
+    
+    query = """CREATE TABLE IF NOT EXISTS users (
+        id INTEGER UNIQUE, 
+        username TEXT NOT NULL UNIQUE,
+        psw TEXT NOT NULL,
+        auth_type TEXT NOT NULL,
         PRIMARY KEY ("id" AUTOINCREMENT)
     )
     """
@@ -116,48 +128,44 @@ def db_update(file):
     except:
         conn.close()
         return False
+def ldap_auth(login, password):
+    conn = Connection(os.environ['ldap_server'], os.environ['ldap_user_cn'], os.environ['ldap_user'], auto_bind=True)
+    conn.search(os.environ['search_user_catalog'], f'(sAMAccountName={login})', attributes=['Name'])
+    name = conn.entries[0]['Name']
+    try:
+        conn = Connection(os.environ['ldap_server'], f"CN={name},{os.environ['search_user_catalog']}", password, auto_bind=True, raise_exceptions=True)
+        return True
+    except:
+        return False
 
-
-from ldap3 import Server, Connection, ALL, SUBTREE
-from ldap3.core.exceptions import LDAPException, LDAPBindError
-
-
-def global_ldap_authentication(user_name, user_pwd):
-    """
-      Function: global_ldap_authentication
-       Purpose: Make a connection to encrypted LDAP server.
-       :params: ** Mandatory Positional Parameters
-                1. user_name - LDAP user Name
-                2. user_pwd - LDAP User Password
-       :return: None
-    """
-
-    # fetch the username and password
-    ldap_user_name = user_name.strip()
-    ldap_user_pwd = user_pwd.strip()
-
-    # ldap server hostname and port
-    ldsp_server = f"ldap://192.168.8.237:389"
-
-    # dn
-    root_dn = "dc=bookcentre,dc=ru"
-
-    # user
-    user = f"cn={ldap_user_name},{root_dn},ou='ProgrammService'"
-
+def login(login, password):
+    conn = sq.connect('database.db')
+    cursor = conn.cursor()
+    query = f"""SELECT * FROM users
+        WHERE username = '{login}'"""
+    cursor.execute(query)
+    user = cursor.fetchall()
+    conn.close()
     print(user)
-    server = Server(ldsp_server, get_info=ALL)
-
-    connection = Connection(server,
-                            user=user,
-                            password=ldap_user_pwd)
-    if not connection.bind():
-        print(f" *** Cannot bind to ldap server: {connection.last_error} ")
-        l_success_msg = f' ** Failed Authentication: {connection.last_error}'
+    if user:
+        if user[0][3] == 'local':
+            if check_password_hash(user[0][2], password):
+                print('local success')
+                return True
+            else:
+                print('local fail')
+                return False
+        elif user[0][3] == 'ldap':
+            if ldap_auth(login, password):
+                print('ldap success')
+                return True
+            else:
+                print('ldap fail')
+                return False
     else:
-        print(f" *** Successful bind to ldap server")
-        l_success_msg = 'Success'
+        print('user not found')
+        return False
 
-    return l_success_msg
-
-# global_ldap_authentication('servicedesk', 'servicedesk')
+# hash = generate_password_hash('1488')
+# print(hash)
+# print(check_password_hash(hash, 'bobas'))
