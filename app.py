@@ -1,13 +1,19 @@
 from flask import Flask, render_template, url_for, request, flash, session, redirect, abort, g, make_response
-
+from flask_login import LoginManager, login_user, login_required
 import dbscripts as db
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'aboba1488'
+login_manager = LoginManager(app)
 
+@login_manager.user_loader
+def load_user(user_id):
+    print('load_user')
+    return db.UserLogin().fromDB(user_id)
 
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html', class1 = 'active', class2 = '', class3 = '')
 
@@ -44,7 +50,10 @@ def about():
 @app.route('/login', methods = ('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        if db.login(request.form['login'], request.form['password']):
+        user = db.login(request.form['login'], request.form['password'])
+        if user:
+            userlogin = db.UserLogin().create(user)
+            login_user(userlogin)
             return redirect(url_for('index'))
         else:
             flash('Не удалось войти', category = 'wrongpass')

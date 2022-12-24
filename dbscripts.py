@@ -129,10 +129,10 @@ def db_update(file):
         conn.close()
         return False
 def ldap_auth(login, password):
-    conn = Connection(os.environ['ldap_server'], os.environ['ldap_user_cn'], os.environ['ldap_user'], auto_bind=True)
-    conn.search(os.environ['search_user_catalog'], f'(sAMAccountName={login})', attributes=['Name'])
-    name = conn.entries[0]['Name']
     try:
+        conn = Connection(os.environ['ldap_server'], os.environ['ldap_user_cn'], os.environ['ldap_user'], auto_bind=True)
+        conn.search(os.environ['search_user_catalog'], f'(sAMAccountName={login})', attributes=['Name'])
+        name = conn.entries[0]['Name']
         conn = Connection(os.environ['ldap_server'], f"CN={name},{os.environ['search_user_catalog']}", password, auto_bind=True, raise_exceptions=True)
         return True
     except:
@@ -151,14 +151,14 @@ def login(login, password):
         if user[0][3] == 'local':
             if check_password_hash(user[0][2], password):
                 print('local success')
-                return True
+                return user[0]
             else:
                 print('local fail')
                 return False
         elif user[0][3] == 'ldap':
             if ldap_auth(login, password):
                 print('ldap success')
-                return True
+                return user[0]
             else:
                 print('ldap fail')
                 return False
@@ -169,3 +169,36 @@ def login(login, password):
 # hash = generate_password_hash('1488')
 # print(hash)
 # print(check_password_hash(hash, 'bobas'))
+
+def getUser(user_id):
+    conn = sq.connect('database.db')
+    cursor = conn.cursor()
+    query = f"""SELECT * FROM users
+        WHERE id = '{user_id}'"""
+    cursor.execute(query)
+    result = cursor.fetchall()
+    conn.close()
+    return result[0]
+
+class UserLogin():
+    def fromDB(self, user_id):
+        self.__user = getUser(user_id)
+        return self
+    
+    def create(self, user):
+        self.__user = user
+        return self
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.__user[0])
+
+print(login('admin', '1488'))
