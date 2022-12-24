@@ -18,6 +18,8 @@
           <li><a class="{{class1}}" href="{{ url_for('index')}}">Главная</a></li>
           <li><a class="{{class2}}" href="{{ url_for('update')}}">Актуализация</a></li>
           <li><a class="{{class3}}" href="{{ url_for('about')}}">О приложении</a></li>
+          <li><a class="user" href="{{ url_for('logout')}}">Выйти</a></li>
+          <li class="user">{{ user }}</li>
         </ul>
       </nav>
     </header>

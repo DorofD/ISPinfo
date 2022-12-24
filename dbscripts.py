@@ -200,5 +200,3 @@ class UserLogin():
 
     def get_id(self):
         return str(self.__user[0])
-
-print(login('admin', '1488'))
