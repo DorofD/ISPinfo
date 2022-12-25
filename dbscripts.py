@@ -148,14 +148,14 @@ def login(login, password):
     conn.close()
     print(user)
     if user:
-        if user[0][3] == 'local':
+        if user[0][3] == 'Local':
             if check_password_hash(user[0][2], password):
                 print('local success')
                 return user[0]
             else:
                 print('local fail')
                 return False
-        elif user[0][3] == 'ldap':
+        elif user[0][3] == 'LDAP':
             if ldap_auth(login, password):
                 print('ldap success')
                 return user[0]
@@ -165,10 +165,6 @@ def login(login, password):
     else:
         print('user not found')
         return False
-
-# hash = generate_password_hash('1488')
-# print(hash)
-# print(check_password_hash(hash, 'bobas'))
 
 def getAllUsers():
     conn = sq.connect('database.db')
@@ -190,23 +186,34 @@ def getUser(user_id):
     return result[0]
 
 def deleteUser(user_id):
-    # try:
+    try:
         conn = sq.connect('database.db')
         cursor = conn.cursor()
         query = f"""
             DELETE FROM users
             WHERE id = '{user_id}'"""
         cursor.execute(query)
-        # query = """
-        #     DELETE FROM users
-        #     """
-        # cursor.execute(query)
         conn.commit()
         conn.close()
         return True
-    # except:
-    #     conn.close()
-    #     return False 
+    except:
+        conn.close()
+        return False
+
+def adduser(username, auth):
+    try:
+        conn = sq.connect('database.db')
+        cursor = conn.cursor()
+        query = f"""INSERT INTO users (username, psw, auth_type) 
+                    VALUES ('{username}', '-', '{auth}')"""
+        cursor.execute(query)
+        conn.commit()
+        conn.close()
+        return True
+    except:
+        conn.close()
+        return False
+
 
 class UserLogin():
     def fromDB(self, user_id):
@@ -229,4 +236,6 @@ class UserLogin():
     def get_id(self):
         return str(self.__user[0])
 
-deleteUser(3)
+# hash = generate_password_hash('1488')
+# print(hash)
+# print(check_password_hash(hash, 'bobas'))

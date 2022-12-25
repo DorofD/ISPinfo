@@ -74,6 +74,11 @@ def deleteuser(id):
     result = db.getAllUsers()
     return render_template('usermgmt.html', result = result, result_len = len(result), class1 = '', class2 = '', class3 = '', class4 = 'active', user = session['username'])
 
+@app.route('/adduser', methods=(['POST']) )
+def adduser():
+    db.adduser(request.form['username'], request.form['auth'])
+    result = db.getAllUsers()
+    return render_template('usermgmt.html', result = result, result_len = len(result), class1 = '', class2 = '', class3 = '', class4 = 'active', user = session['username'])
 
 
 @app.route('/login', methods = ('GET', 'POST'))

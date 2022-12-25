@@ -1,14 +1,15 @@
 {% extends 'base.html' %} {% block content %} {{ super() }} {% if result_len %}
-<table>
+<table class="users">
   <tr>
     <th>Пользователь</th>
-    <th>Пароль</th>
+    <!-- <th>Пароль</th> -->
     <th>Аутентификация</th>
+    <th>Действие</th>
   </tr>
   {% for i in range(result_len) %}
   <tr>
     <td>{{ result[i][1] }}</td>
-    <td>{{ result[i][2] }}</td>
+    <!-- <td>{{ result[i][2] }}</td> -->
     <td>{{ result[i][3] }}</td>
     <td>
       <form
@@ -16,11 +17,27 @@
         method="POST"
         enctype="multipart/form-data"
       >
-        <p><input type="submit" value="Удалить" name="delete" /></p>
+        {% if result[i][1] == 'admin' %}
+        <input type="submit" value="Удалить" name="delete" disabled="yes" />
+        {% else %}
+        <input type="submit" value="Удалить" name="delete" />
+        {% endif %}
       </form>
     </td>
   </tr>
   {% endfor %}{% else %} Пользователи не найдены {% endif %}
+  <form action="{{url_for('adduser')}}" method="POST" enctype="multipart/form-data">
+    <tr>
+      <td><input type="text" name="username" /></td>
+      <td>
+        <select name="auth" id="1">
+          <option value="LDAP">LDAP</option>
+          <option value="Local">Local</option>
+        </select>
+      </td>
+      <td><input type="submit" value="Добавить" name="add" /></td>
+    </tr>
+  </form>
 </table>
 <br />
 
