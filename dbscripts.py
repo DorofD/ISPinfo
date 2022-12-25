@@ -35,6 +35,15 @@ def create_db():
     cursor.execute(query)
     conn.close()
 
+def create_admin():
+    conn = sq.connect('database.db')
+    cursor = conn.cursor()
+    query = """INSERT INTO users (username, psw, auth_type) 
+                VALUES ('admin', 'pbkdf2:sha256:260000$QXnsaEQce8nu6M5s$878f380fa0e24f15ee8142a1b4cb054c048feda759445678c306f9ddeaae5bce', 'Local')"""
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
+
 def get_data():
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -236,6 +245,6 @@ class UserLogin():
     def get_id(self):
         return str(self.__user[0])
 
-# hash = generate_password_hash('1488')
-# print(hash)
-# print(check_password_hash(hash, 'bobas'))
+hash = generate_password_hash('1488')
+print(hash)
+print(check_password_hash(hash, '1488'))
