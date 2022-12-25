@@ -170,6 +170,15 @@ def login(login, password):
 # print(hash)
 # print(check_password_hash(hash, 'bobas'))
 
+def getAllUsers():
+    conn = sq.connect('database.db')
+    cursor = conn.cursor()
+    query = f"""SELECT * FROM users"""
+    cursor.execute(query)
+    result = cursor.fetchall()
+    conn.close()
+    return result
+
 def getUser(user_id):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -179,6 +188,25 @@ def getUser(user_id):
     result = cursor.fetchall()
     conn.close()
     return result[0]
+
+def deleteUser(user_id):
+    # try:
+        conn = sq.connect('database.db')
+        cursor = conn.cursor()
+        query = f"""
+            DELETE FROM users
+            WHERE id = '{user_id}'"""
+        cursor.execute(query)
+        # query = """
+        #     DELETE FROM users
+        #     """
+        # cursor.execute(query)
+        conn.commit()
+        conn.close()
+        return True
+    # except:
+    #     conn.close()
+    #     return False 
 
 class UserLogin():
     def fromDB(self, user_id):
@@ -200,3 +228,5 @@ class UserLogin():
 
     def get_id(self):
         return str(self.__user[0])
+
+deleteUser(3)
