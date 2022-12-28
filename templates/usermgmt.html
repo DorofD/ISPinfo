@@ -17,7 +17,7 @@
         method="POST"
         enctype="multipart/form-data"
       >
-        {% if result[i][1] == 'admin' %}
+        {% if result[i][1] == 'admin' or result[i][1] == user%}
         <input type="submit" value="Удалить" name="delete" disabled="yes" />
         {% else %}
         <input type="submit" value="Удалить" name="delete" />
