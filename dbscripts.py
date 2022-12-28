@@ -252,5 +252,3 @@ class UserLogin():
 
 # create_db()
 # create_admin()
-
-print(ldap_auth('dorofeev.e', 'P@ssw0rD715'))
