@@ -2,15 +2,15 @@
 <table class="users">
   <tr>
     <th>Пользователь</th>
-    <!-- <th>Пароль</th> -->
+    <th>Тип пользователя</th>
     <th>Аутентификация</th>
     <th>Действие</th>
   </tr>
   {% for i in range(result_len) %}
   <tr>
     <td>{{ result[i][1] }}</td>
-    <!-- <td>{{ result[i][2] }}</td> -->
     <td>{{ result[i][3] }}</td>
+    <td>{{ result[i][4] }}</td>
     <td>
       <form
         action="{{url_for('deleteuser', id = result[i][0])}}"
@@ -26,9 +26,19 @@
     </td>
   </tr>
   {% endfor %}{% else %} Пользователи не найдены {% endif %}
-  <form action="{{url_for('adduser')}}" method="POST" enctype="multipart/form-data">
+  <form
+    action="{{url_for('adduser')}}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
     <tr>
       <td><input type="text" name="username" /></td>
+      <td>
+        <select name="usertype" id="1">
+          <option value="Support">Support</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </td>
       <td>
         <select name="auth" id="1">
           <option value="LDAP">LDAP</option>

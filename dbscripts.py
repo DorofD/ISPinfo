@@ -28,6 +28,7 @@ def create_db():
         id INTEGER UNIQUE, 
         username TEXT NOT NULL UNIQUE,
         psw TEXT NOT NULL,
+        user_type TEXT NOT NULL,
         auth_type TEXT NOT NULL,
         PRIMARY KEY ("id" AUTOINCREMENT)
     )
@@ -38,8 +39,8 @@ def create_db():
 def create_admin():
     conn = sq.connect('database.db')
     cursor = conn.cursor()
-    query = """INSERT INTO users (username, psw, auth_type) 
-                VALUES ('admin', 'pbkdf2:sha256:260000$QXnsaEQce8nu6M5s$878f380fa0e24f15ee8142a1b4cb054c048feda759445678c306f9ddeaae5bce', 'Local')"""
+    query = """INSERT INTO users (username, psw, user_type, auth_type) 
+                VALUES ('admin', 'pbkdf2:sha256:260000$QXnsaEQce8nu6M5s$878f380fa0e24f15ee8142a1b4cb054c048feda759445678c306f9ddeaae5bce', 'Admin', 'Local')"""
     cursor.execute(query)
     conn.commit()
     conn.close()
@@ -157,14 +158,14 @@ def login(login, password):
     conn.close()
     print(user)
     if user:
-        if user[0][3] == 'Local':
+        if user[0][4] == 'Local':
             if check_password_hash(user[0][2], password):
                 print('local success')
                 return user[0]
             else:
                 print('local fail')
                 return False
-        elif user[0][3] == 'LDAP':
+        elif user[0][4] == 'LDAP':
             if ldap_auth(login, password):
                 print('ldap success')
                 return user[0]
@@ -209,12 +210,12 @@ def deleteUser(user_id):
         conn.close()
         return False
 
-def adduser(username, auth):
+def adduser(username, usertype, auth):
     try:
         conn = sq.connect('database.db')
         cursor = conn.cursor()
-        query = f"""INSERT INTO users (username, psw, auth_type) 
-                    VALUES ('{username}', '-', '{auth}')"""
+        query = f"""INSERT INTO users (username, psw, user_type, auth_type) 
+                    VALUES ('{username}', '-', '{usertype}', '{auth}')"""
         cursor.execute(query)
         conn.commit()
         conn.close()
@@ -245,6 +246,11 @@ class UserLogin():
     def get_id(self):
         return str(self.__user[0])
 
-hash = generate_password_hash('1488')
-print(hash)
-print(check_password_hash(hash, '1488'))
+# hash = generate_password_hash('1488')
+# print(hash)
+# print(check_password_hash(hash, '1488'))
+
+# create_db()
+# create_admin()
+
+print(ldap_auth('dorofeev.e', 'P@ssw0rD715'))
