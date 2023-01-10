@@ -4,6 +4,7 @@ from ldap3 import Connection
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
+
 def create_db():
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -23,7 +24,7 @@ def create_db():
     )
     """
     cursor.execute(query)
-    
+
     query = """CREATE TABLE IF NOT EXISTS users (
         id INTEGER UNIQUE, 
         username TEXT NOT NULL UNIQUE,
@@ -36,6 +37,7 @@ def create_db():
     cursor.execute(query)
     conn.close()
 
+
 def create_admin():
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -45,6 +47,7 @@ def create_admin():
     conn.commit()
     conn.close()
 
+
 def get_data():
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -52,7 +55,8 @@ def get_data():
     for result in cursor:
         print(result)
     conn.close()
-    
+
+
 def get_contracts_pid(pid):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -63,6 +67,7 @@ def get_contracts_pid(pid):
     conn.close()
     return result
 
+
 def get_contracts_shop(shop_name):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -72,7 +77,8 @@ def get_contracts_shop(shop_name):
     result = cursor.fetchall()
     conn.close()
     return result
-    
+
+
 def get_contract_id(id):
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -83,25 +89,27 @@ def get_contract_id(id):
     conn.close()
     return result
 
+
 def delete_all_data():
-        conn = sq.connect('database.db')
-        cursor = conn.cursor()
-        query = """
+    conn = sq.connect('database.db')
+    cursor = conn.cursor()
+    query = """
             SELECT * FROM contracts
         """
-        cursor.execute(query)
-        query = """
+    cursor.execute(query)
+    query = """
             DELETE FROM contracts
         """
-        cursor.execute(query)
-        conn.commit()
-        conn.close()
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
+
 
 def db_update(file):
     try:
         conn = sq.connect('database.db')
         cursor = conn.cursor()
-        wb = openpyxl.load_workbook(file) # подключение листа Excel
+        wb = openpyxl.load_workbook(file)  # подключение листа Excel
         sheet = wb.active
         # перед действием ниже нужно дописать проверки импортированного файла
         query = """
@@ -138,15 +146,21 @@ def db_update(file):
     except:
         conn.close()
         return False
+
+
 def ldap_auth(login, password):
     try:
-        conn = Connection(os.environ['ldap_server'], os.environ['ldap_user_cn'], os.environ['ldap_user'], auto_bind=True)
-        conn.search(os.environ['search_user_catalog'], f'(sAMAccountName={login})', attributes=['Name'])
+        conn = Connection(
+            os.environ['ldap_server'], os.environ['ldap_user_cn'], os.environ['ldap_user'], auto_bind=True)
+        conn.search(os.environ['search_user_catalog'],
+                    f'(sAMAccountName={login})', attributes=['Name'])
         name = conn.entries[0]['Name']
-        conn = Connection(os.environ['ldap_server'], f"CN={name},{os.environ['search_user_catalog']}", password, auto_bind=True, raise_exceptions=True)
+        conn = Connection(
+            os.environ['ldap_server'], f"CN={name},{os.environ['search_user_catalog']}", password, auto_bind=True, raise_exceptions=True)
         return True
     except:
         return False
+
 
 def login(login, password):
     conn = sq.connect('database.db')
@@ -176,6 +190,7 @@ def login(login, password):
         print('user not found')
         return False
 
+
 def getAllUsers():
     conn = sq.connect('database.db')
     cursor = conn.cursor()
@@ -184,6 +199,7 @@ def getAllUsers():
     result = cursor.fetchall()
     conn.close()
     return result
+
 
 def getUser(user_id):
     conn = sq.connect('database.db')
@@ -194,6 +210,7 @@ def getUser(user_id):
     result = cursor.fetchall()
     conn.close()
     return result[0]
+
 
 def deleteUser(user_id):
     try:
@@ -209,6 +226,7 @@ def deleteUser(user_id):
     except:
         conn.close()
         return False
+
 
 def adduser(username, usertype, auth):
     try:
@@ -229,7 +247,7 @@ class UserLogin():
     def fromDB(self, user_id):
         self.__user = getUser(user_id)
         return self
-    
+
     def create(self, user):
         self.__user = user
         return self
