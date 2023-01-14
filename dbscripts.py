@@ -4,6 +4,16 @@ from ldap3 import Connection
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
+from dotenv import load_dotenv
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
+LDAP_SERVER = os.environ['LDAP_SERVER']
+LDAP_USER = os.environ['LDAP_USER']
+LDAP_USER_CN = os.environ['LDAP_USER_CN']
+SEARCH_USER_CATALOG = os.environ['SEARCH_USER_CATALOG']
+
 
 def create_db():
     conn = sq.connect('database.db')
@@ -151,12 +161,12 @@ def db_update(file):
 def ldap_auth(login, password):
     try:
         conn = Connection(
-            os.environ['ldap_server'], os.environ['ldap_user_cn'], os.environ['ldap_user'], auto_bind=True)
-        conn.search(os.environ['search_user_catalog'],
+            LDAP_SERVER, LDAP_USER_CN, LDAP_USER, auto_bind=True)
+        conn.search(SEARCH_USER_CATALOG,
                     f'(sAMAccountName={login})', attributes=['Name'])
         name = conn.entries[0]['Name']
         conn = Connection(
-            os.environ['ldap_server'], f"CN={name},{os.environ['search_user_catalog']}", password, auto_bind=True, raise_exceptions=True)
+            LDAP_SERVER, f"CN={name},{SEARCH_USER_CATALOG}", password, auto_bind=True, raise_exceptions=True)
         return True
     except:
         return False
