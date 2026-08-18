@@ -5,9 +5,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 from dotenv import load_dotenv
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-if os.path.exists(dotenv_path):
-    load_dotenv(dotenv_path)
+# .env лежит в корне проекта (на уровень выше src/)
+_project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+for _dotenv_path in (os.path.join(_project_root, '.env'), os.path.join(os.path.dirname(__file__), '.env')):
+    if os.path.exists(_dotenv_path):
+        load_dotenv(_dotenv_path)
+        break
+
+# Путь к БД: по умолчанию database.db рядом с этим файлом,
+# переопределяется переменной окружения DB_PATH (например, в Docker)
+DB_PATH = os.environ.get('DB_PATH', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.db'))
 
 LDAP_SERVER = os.environ['LDAP_SERVER']
 LDAP_USER = os.environ['LDAP_USER']
@@ -16,7 +23,7 @@ SEARCH_USER_CATALOG = os.environ['SEARCH_USER_CATALOG']
 
 
 def create_db():
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = """CREATE TABLE IF NOT EXISTS contracts (
         id INTEGER NOT NULL UNIQUE, 
@@ -49,7 +56,7 @@ def create_db():
 
 
 def create_admin():
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = """INSERT INTO users (username, psw, user_type, auth_type) 
                 VALUES ('admin', 'pbkdf2:sha256:260000$QXnsaEQce8nu6M5s$878f380fa0e24f15ee8142a1b4cb054c048feda759445678c306f9ddeaae5bce', 'Admin', 'Local')"""
@@ -59,7 +66,7 @@ def create_admin():
 
 
 def get_data():
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""SELECT * FROM shops""")
     for result in cursor:
@@ -68,7 +75,7 @@ def get_data():
 
 
 def get_contracts_pid(pid):
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = f"""SELECT * FROM contracts
         WHERE pid = '{pid}'"""
@@ -79,7 +86,7 @@ def get_contracts_pid(pid):
 
 
 def get_contracts_shop(shop_name):
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = f"""SELECT * FROM contracts
         WHERE shop_name LIKE '%{shop_name}%'"""
@@ -90,7 +97,7 @@ def get_contracts_shop(shop_name):
 
 
 def get_contract_id(id):
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = f"""SELECT * FROM contracts
         WHERE id = '{id}'"""
@@ -101,7 +108,7 @@ def get_contract_id(id):
 
 
 def delete_all_data():
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = """
             SELECT * FROM contracts
@@ -117,7 +124,7 @@ def delete_all_data():
 
 def db_update(file):
     try:
-        conn = sq.connect('database.db')
+        conn = sq.connect(DB_PATH)
         cursor = conn.cursor()
         wb = openpyxl.load_workbook(file)  # подключение листа Excel
         sheet = wb.active
@@ -173,7 +180,7 @@ def ldap_auth(login, password):
 
 
 def login(login, password):
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = f"""SELECT * FROM users
         WHERE username = '{login}'"""
@@ -202,7 +209,7 @@ def login(login, password):
 
 
 def getAllUsers():
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = f"""SELECT * FROM users"""
     cursor.execute(query)
@@ -212,7 +219,7 @@ def getAllUsers():
 
 
 def getUser(user_id):
-    conn = sq.connect('database.db')
+    conn = sq.connect(DB_PATH)
     cursor = conn.cursor()
     query = f"""SELECT * FROM users
         WHERE id = '{user_id}'"""
@@ -224,7 +231,7 @@ def getUser(user_id):
 
 def deleteUser(user_id):
     try:
-        conn = sq.connect('database.db')
+        conn = sq.connect(DB_PATH)
         cursor = conn.cursor()
         query = f"""
             DELETE FROM users
@@ -240,7 +247,7 @@ def deleteUser(user_id):
 
 def adduser(username, usertype, auth):
     try:
-        conn = sq.connect('database.db')
+        conn = sq.connect(DB_PATH)
         cursor = conn.cursor()
         query = f"""INSERT INTO users (username, psw, user_type, auth_type) 
                     VALUES ('{username}', '-', '{usertype}', '{auth}')"""

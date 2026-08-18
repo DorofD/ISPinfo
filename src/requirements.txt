@@ -1,0 +1,6 @@
+flask
+flask-login
+openpyxl
+ldap3
+python-dotenv
+gunicorn
