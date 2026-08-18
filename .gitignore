@@ -10,3 +10,5 @@ wsgi.py.save
 sas.py
 .env
 test.py
+data/*
+!data/.gitkeep

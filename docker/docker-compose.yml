@@ -1,0 +1,19 @@
+name: ispinfo
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: ispinfo
+    ports:
+      # проброс на локальную сеть: http://<IP-машины>:8080
+      - "8080:5000"
+    env_file:
+      - ../.env
+    environment:
+      # БД внутри volume, а не в образе
+      DB_PATH: /app/data/database.db
+    volumes:
+      - ../data:/app/data
+    restart: unless-stopped

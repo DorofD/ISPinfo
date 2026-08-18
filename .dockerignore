@@ -1,0 +1,12 @@
+.git
+.env
+data
+__pycache__
+*.pyc
+venv
+ISPinfoenv
+database.db
+docker
+src/testContracts.xlsx
+README.md
+AGENTS.md
