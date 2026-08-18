@@ -1,14 +1,11 @@
-# Контекст сборки — корень проекта (см. docker/docker-compose.yml)
 FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
 COPY src/ .
 
-# БД и переменные окружения — извне (см. docker/docker-compose.yml)
+RUN pip install --no-cache-dir -r requirements.txt
+
 VOLUME ["/app/data"]
 
 EXPOSE 5000

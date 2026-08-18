@@ -42,7 +42,7 @@
 2. Соберите и запустите (compose-файл лежит в каталоге `docker/`):
 
    ```bash
-   docker compose -f docker/docker-compose.yml up -d --build
+   docker compose up -d --build
    ```
 
 3. Откройте приложение: `http://<IP-машины>:8080`
@@ -52,23 +52,9 @@
 Полезные команды:
 
 ```bash
-docker compose -f docker/docker-compose.yml logs -f        # логи приложения
-docker compose -f docker/docker-compose.yml down           # остановить (данные в ./data сохраняются)
-docker compose -f docker/docker-compose.yml up -d --build  # пересобрать после изменений кода
-```
-
-> Альтернатива: `cd docker && docker compose up -d --build` — пути в compose-файле указаны относительно него, поэтому оба варианта эквивалентны.
-
-## Локальный запуск (без Docker)
-
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-cp .env.example .env          # заполнить LDAP-переменные
-python src/init_db.py         # создать БД и пользователя admin (1488)
-python src/app.py             # http://localhost:5000
+docker compose logs -f        # логи приложения
+docker compose down           # остановить (данные в ./data сохраняются)
+docker compose up -d --build  # пересобрать после изменений кода
 ```
 
 ## Импорт данных
