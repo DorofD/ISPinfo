@@ -11,4 +11,4 @@ VOLUME ["/app/data"]
 EXPOSE 5000
 
 # Инициализация БД при первом старте + gunicorn (без debug-режима)
-CMD ["sh", "-c", "python init_db.py && gunicorn -b 0.0.0.0:5000 --workers 2 app:app"]
+CMD ["sh", "-c", "python init_db.py && gunicorn -b 0.0.0.0:5000 --workers 4 app:app"]

@@ -7,11 +7,11 @@ services:
       dockerfile: docker/Dockerfile
     container_name: ispinfo
     ports:
-      - "8080:5000"
+      - "8082:5000"
     env_file:
-      - .env
+      - ./.env
     environment:
       DB_PATH: /app/data/database.db
     volumes:
-      - data:/app/data
+      - ./data:/app/data
     restart: unless-stopped
